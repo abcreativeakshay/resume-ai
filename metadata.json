@@ -1,0 +1,5 @@
+{
+  "name": "ResumeAI Builder",
+  "description": "An AI-powered resume generator that transforms raw text into professionally formatted PDF-ready resumes using multiple templates.",
+  "requestFramePermissions": []
+}
