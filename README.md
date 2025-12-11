@@ -153,26 +153,6 @@ Click "Generate Career Suite" to process your data. The AI will:
 - **Download DOCX**: Generates Microsoft Word document
 - **Copy Outreach Content**: Direct copy buttons for emails and social posts
 
-## 🎯 Data Flow Architecture
-
-```mermaid
-graph LR
-    A[User Input] --> B(CombinedInput Object)
-    B --> C[AI Processing]
-    C --> D[Structured JSON]
-    D --> E[React Components]
-    E --> F[HTML Templates]
-    F --> G[Export/Preview]
-    G --> H[localStorage]
-    
-    subgraph "AI Processing (Gemini)"
-        C --> C1[Content Analysis]
-        C1 --> C2[Career Analytics]
-        C2 --> C3[Content Generation]
-        C3 --> C4[Strategy Tools]
-    end
-```
-
 ## 🔐 Privacy & Security
 
 - **Local Storage**: All data persists only in your browser
