@@ -46,11 +46,11 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ data, theme }) => {
         </div>
       </header>
       
-      {data.summary && <section className="mb-6"><p className="text-gray-800 text-justify">{data.summary}</p></section>}
+      {data.summary && <section className="mb-6"><p className="text-gray-800 text-justify leading-relaxed">{data.summary}</p></section>}
       
       <section className="mb-8">
         <h2 className="font-bold text-lg uppercase tracking-wider mb-4 border-b pb-1" style={{ borderColor: theme.color }}>Experience</h2>
-        {data.experience.map((e,i)=>(
+        {(data.experience || []).map((e,i)=>(
             <div key={i} className="mb-5 break-inside-avoid">
                 <div className="flex justify-between items-baseline mb-1">
                     <h3 className="font-bold text-lg">{e.role}</h3>
@@ -62,7 +62,7 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ data, theme }) => {
         ))}
       </section>
 
-      {data.projects.length > 0 && <section className="mb-8">
+      {(data.projects || []).length > 0 && <section className="mb-8">
         <h2 className="font-bold text-lg uppercase tracking-wider mb-4 border-b pb-1" style={{ borderColor: theme.color }}>Projects</h2>
         {data.projects.slice(0, 5).map((p,i)=>(
             <div key={i} className="mb-4 break-inside-avoid">
@@ -71,14 +71,14 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ data, theme }) => {
                     {p.link && <span className="text-sm text-blue-600 underline">{p.link}</span>}
                 </div>
                 <div className="text-xs font-bold text-gray-500 mb-1 italic">{p.technologies.join(', ')}</div>
-                <p className="text-sm text-gray-700 text-justify">{p.description}</p>
+                <p className="text-sm text-gray-700 text-justify leading-relaxed">{p.description}</p>
             </div>
         ))}
       </section>}
 
       <section className="mb-8">
           <h2 className="font-bold text-lg uppercase tracking-wider mb-4 border-b pb-1" style={{ borderColor: theme.color }}>Education</h2>
-          {data.education.map((e,i)=>(
+          {(data.education || []).map((e,i)=>(
               <div key={i} className="mb-2 break-inside-avoid">
                   <div className="flex justify-between">
                       <span className="font-bold">{e.school}</span>
@@ -89,11 +89,11 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ data, theme }) => {
           ))}
       </section>
 
-      <section className="mb-8">
+      <section className="mb-8 break-inside-avoid">
           <h2 className="font-bold text-lg uppercase tracking-wider mb-4 border-b pb-1" style={{ borderColor: theme.color }}>Skills</h2>
-          <div className="flex flex-wrap gap-2 text-sm text-gray-700 text-justify">
-              {data.skills.join(' • ')}
-          </div>
+          <p className="text-sm text-gray-700 text-justify leading-relaxed">
+              {(data.skills || []).join(' • ')}
+          </p>
       </section>
     </div>
   );
@@ -107,13 +107,13 @@ export const ElegantTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         </div>
         <hr className="w-16 mx-auto border-t-2 mb-10" style={{ borderColor: theme.color }}/>
         
-        <p className="text-center italic mb-10 max-w-xl mx-auto text-gray-600 text-justify">{data.summary}</p>
+        <p className="text-center italic mb-10 max-w-xl mx-auto text-gray-600 text-justify leading-relaxed">{data.summary}</p>
         
         <div className="grid grid-cols-1 gap-8">
             <section>
                 <h3 className="text-center text-sm font-bold uppercase tracking-widest mb-6 text-gray-400">Professional History</h3>
-                {data.experience.map((e,i) => (
-                    <div key={i} className="mb-8">
+                {(data.experience || []).map((e,i) => (
+                    <div key={i} className="mb-8 break-inside-avoid">
                         <div className="text-center mb-2">
                             <div className="font-bold text-lg">{e.company}</div>
                             <div className="text-sm italic">{e.role}</div>
@@ -123,18 +123,32 @@ export const ElegantTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                     </div>
                 ))}
             </section>
-            {data.projects.length > 0 && <section>
+            {(data.projects || []).length > 0 && <section>
                 <h3 className="text-center text-sm font-bold uppercase tracking-widest mb-6 text-gray-400">Selected Projects</h3>
                 {data.projects.slice(0, 5).map((p,i) => (
-                    <div key={i} className="mb-6 max-w-2xl mx-auto">
+                    <div key={i} className="mb-6 max-w-2xl mx-auto break-inside-avoid">
                         <div className="text-center mb-1">
                              <div className="font-bold text-base">{p.name}</div>
                              <div className="text-xs text-gray-500 italic">{p.technologies.join(' / ')}</div>
                         </div>
-                        <p className="text-sm text-gray-600 text-justify">{p.description}</p>
+                        <p className="text-sm text-gray-600 text-justify leading-relaxed">{p.description}</p>
                     </div>
                 ))}
             </section>}
+            
+            <section>
+                 <h3 className="text-center text-sm font-bold uppercase tracking-widest mb-6 text-gray-400">Skills & Education</h3>
+                 <div className="text-center max-w-xl mx-auto mb-6">
+                    <p className="italic text-gray-700 leading-loose">{(data.skills || []).join(' • ')}</p>
+                 </div>
+                 <div className="text-center space-y-2">
+                    {(data.education || []).map((e,i) => (
+                        <div key={i} className="text-sm">
+                            <span className="font-bold">{e.school}</span>, {e.degree}
+                        </div>
+                    ))}
+                 </div>
+            </section>
         </div>
     </div>
 );
@@ -152,10 +166,10 @@ const TimelineTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
           {data.personalInfo.fullName.charAt(0)}
        </div>
     </header>
-    <div className="mb-8"><p className="text-gray-600 text-justify">{data.summary}</p></div>
+    <div className="mb-8"><p className="text-gray-600 text-justify leading-relaxed">{data.summary}</p></div>
     <div className="relative border-l-2 border-gray-200 ml-4 space-y-10 pl-8 pb-4">
-        {data.experience.map((exp, i) => (
-            <div key={i} className="relative group">
+        {(data.experience || []).map((exp, i) => (
+            <div key={i} className="relative group break-inside-avoid">
                 <div className="absolute -left-[41px] top-1 w-6 h-6 rounded-full border-4 border-white transition-transform group-hover:scale-125" style={{ backgroundColor: theme.color }}></div>
                 <h3 className="text-xl font-bold">{exp.role}</h3>
                 <div className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">{exp.company} | {exp.duration}</div>
@@ -164,27 +178,27 @@ const TimelineTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         ))}
     </div>
     
-    {data.projects.length > 0 && <div className="mt-8 ml-4 pl-8">
+    {(data.projects || []).length > 0 && <div className="mt-8 ml-4 pl-8">
         <h3 className="font-bold text-xl mb-6 uppercase tracking-widest text-gray-400">Projects</h3>
         {data.projects.slice(0, 5).map((p,i) => (
-            <div key={i} className="mb-6 border-b pb-4 last:border-0">
+            <div key={i} className="mb-6 border-b pb-4 last:border-0 break-inside-avoid">
                 <div className="flex justify-between items-center mb-1">
                      <div className="font-bold text-lg">{p.name}</div>
                      <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">{p.technologies.join(', ')}</div>
                 </div>
-                <p className="text-sm text-gray-600 text-justify">{p.description}</p>
+                <p className="text-sm text-gray-600 text-justify leading-relaxed">{p.description}</p>
             </div>
         ))}
     </div>}
 
-    <div className="grid grid-cols-2 gap-8 mt-10 border-t pt-8 bg-gray-50 -mx-10 px-10 pb-10 -mb-10">
+    <div className="grid grid-cols-2 gap-8 mt-10 border-t pt-8 bg-gray-50 -mx-10 px-10 pb-10 -mb-10 break-inside-avoid">
         <div>
             <h3 className="font-bold mb-4 uppercase tracking-widest text-gray-400">Education</h3>
-            {data.education.map((e,i)=>(<div key={i} className="mb-2 font-bold text-gray-700">{e.school}<span className="block text-sm font-normal text-gray-500">{e.degree}</span></div>))}
+            {(data.education || []).map((e,i)=>(<div key={i} className="mb-2 font-bold text-gray-700">{e.school}<span className="block text-sm font-normal text-gray-500">{e.degree}</span></div>))}
         </div>
         <div>
             <h3 className="font-bold mb-4 uppercase tracking-widest text-gray-400">Skills</h3>
-            <div className="flex flex-wrap gap-2">{data.skills.map((s,i)=><span key={i} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-bold shadow-sm">{s}</span>)}</div>
+            <div className="flex flex-wrap gap-2">{(data.skills || []).map((s,i)=><span key={i} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-bold shadow-sm">{s}</span>)}</div>
         </div>
     </div>
   </div>
@@ -195,26 +209,26 @@ const GridTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <header className="col-span-12 bg-white p-8 rounded shadow-sm border-t-4" style={{ borderColor: theme.color }}>
         <h1 className="text-4xl font-bold">{data.personalInfo.fullName}</h1>
         <div className="text-sm text-gray-500 mt-2">{data.personalInfo.email} • {data.personalInfo.phone}</div>
-        <p className="mt-4 text-gray-600 max-w-3xl text-justify">{data.summary}</p>
+        <p className="mt-4 text-gray-600 max-w-3xl text-justify leading-relaxed">{data.summary}</p>
      </header>
      <div className="col-span-8 space-y-6">
         <section className="bg-white p-6 rounded shadow-sm">
            <h3 className="font-bold uppercase text-sm mb-4 text-gray-400">Experience</h3>
-           {data.experience.map((exp, i) => (
-               <div key={i} className="mb-6 last:mb-0 border-b last:border-0 pb-6 last:pb-0 border-gray-100">
+           {(data.experience || []).map((exp, i) => (
+               <div key={i} className="mb-6 last:mb-0 border-b last:border-0 pb-6 last:pb-0 border-gray-100 break-inside-avoid">
                    <div className="flex justify-between items-center"><span className="font-bold text-lg">{exp.role}</span><span className="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-600">{exp.duration}</span></div>
                    <div className="text-sm font-bold mb-3" style={{ color: theme.color }}>{exp.company}</div>
                    <div className="text-sm text-gray-600"><RenderBullets items={exp.description} /></div>
                </div>
            ))}
         </section>
-        {data.projects.length > 0 && <section className="bg-white p-6 rounded shadow-sm">
+        {(data.projects || []).length > 0 && <section className="bg-white p-6 rounded shadow-sm">
            <h3 className="font-bold uppercase text-sm mb-4 text-gray-400">Projects</h3>
            {data.projects.slice(0,5).map((p, i) => (
-               <div key={i} className="mb-4">
+               <div key={i} className="mb-4 break-inside-avoid">
                    <div className="flex justify-between"><span className="font-bold text-sm">{p.name}</span>{p.link && <span className="text-xs text-blue-500 underline">{p.link}</span>}</div>
                    <div className="text-xs text-gray-500 mb-1 italic">{p.technologies.join(', ')}</div>
-                   <p className="text-xs text-gray-600 text-justify">{p.description}</p>
+                   <p className="text-xs text-gray-600 text-justify leading-relaxed">{p.description}</p>
                </div>
            ))}
         </section>}
@@ -222,11 +236,11 @@ const GridTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="col-span-4 space-y-6">
         <section className="bg-white p-6 rounded shadow-sm">
             <h3 className="font-bold uppercase text-sm mb-4 text-gray-400">Skills</h3>
-            <div className="flex flex-wrap gap-2">{data.skills.map((s,i) => <span key={i} className="text-xs border border-gray-200 px-2 py-1 rounded bg-gray-50">{s}</span>)}</div>
+            <div className="flex flex-wrap gap-2">{(data.skills || []).map((s,i) => <span key={i} className="text-xs border border-gray-200 px-2 py-1 rounded bg-gray-50">{s}</span>)}</div>
         </section>
         <section className="bg-white p-6 rounded shadow-sm">
             <h3 className="font-bold uppercase text-sm mb-4 text-gray-400">Education</h3>
-            {data.education.map((e,i) => <div key={i} className="text-sm mb-3"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div><div className="text-xs text-gray-400">{e.year}</div></div>)}
+            {(data.education || []).map((e,i) => <div key={i} className="text-sm mb-3"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div><div className="text-xs text-gray-400">{e.year}</div></div>)}
         </section>
      </div>
   </div>
@@ -235,7 +249,7 @@ const GridTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
 const StartupTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
   <div className={`w-full min-h-full bg-white p-12 ${getFontClass('lato')}`}>
      <h1 className="text-6xl font-black mb-2 tracking-tighter" style={{ color: theme.color }}>{data.personalInfo.fullName.toLowerCase()}.</h1>
-     <p className="text-xl text-gray-400 mb-12 border-l-4 border-black pl-4 text-justify">{data.summary}</p>
+     <p className="text-xl text-gray-400 mb-12 border-l-4 border-black pl-4 text-justify leading-relaxed">{data.summary}</p>
      <div className="grid grid-cols-3 gap-12">
         <div className="col-span-1 border-t-2 pt-4 border-black h-fit">
             <h3 className="font-bold text-black mb-4 tracking-tight">CONTACT</h3>
@@ -244,27 +258,27 @@ const StartupTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
             <p className="text-sm">{data.personalInfo.linkedin}</p>
             
             <h3 className="font-bold text-black mt-8 mb-4 tracking-tight">SKILLS</h3>
-            {data.skills.map((s,i)=><div key={i} className="text-sm border-b border-gray-100 py-1">{s}</div>)}
+            {(data.skills || []).map((s,i)=><div key={i} className="text-sm border-b border-gray-100 py-1">{s}</div>)}
             
             <h3 className="font-bold text-black mt-8 mb-4 tracking-tight">EDUCATION</h3>
-            {data.education.map((e,i)=><div key={i} className="text-sm mb-2 font-bold">{e.school}<br/><span className="font-normal text-gray-500">{e.degree}</span></div>)}
+            {(data.education || []).map((e,i)=><div key={i} className="text-sm mb-2 font-bold">{e.school}<br/><span className="font-normal text-gray-500">{e.degree}</span></div>)}
         </div>
         <div className="col-span-2 border-t-2 pt-4 border-black">
             <h3 className="font-bold text-black mb-6 tracking-tight">WORK HISTORY</h3>
-            {data.experience.map((exp, i) => (
-                <div key={i} className="mb-10">
+            {(data.experience || []).map((exp, i) => (
+                <div key={i} className="mb-10 break-inside-avoid">
                     <h4 className="text-3xl font-bold mb-1">{exp.role}</h4>
                     <div className="text-sm font-mono text-gray-500 mb-4 bg-gray-100 inline-block px-2 py-1">@{exp.company} // {exp.duration}</div>
                     <div className="text-gray-700 text-sm leading-relaxed"><RenderBullets items={exp.description} /></div>
                 </div>
             ))}
-            {data.projects.length > 0 && <div className="mt-12">
+            {(data.projects || []).length > 0 && <div className="mt-12">
                  <h3 className="font-bold text-black mb-6 tracking-tight">PROJECTS</h3>
                  {data.projects.slice(0,5).map((p,i) => (
-                     <div key={i} className="mb-8">
+                     <div key={i} className="mb-8 break-inside-avoid">
                          <div className="font-bold text-xl">{p.name}</div>
                          <div className="text-xs font-mono text-gray-400 mb-2">{p.technologies.join(' + ')}</div>
-                         <p className="text-sm text-gray-700 text-justify">{p.description}</p>
+                         <p className="text-sm text-gray-700 text-justify leading-relaxed">{p.description}</p>
                      </div>
                  ))}
             </div>}
@@ -281,30 +295,30 @@ const AcademicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      </div>
      <section className="mb-8">
         <h2 className="text-md font-bold uppercase border-b border-gray-300 mb-4 pb-1">Education</h2>
-        {data.education.map((e,i) => <div key={i} className="mb-3"><span className="font-bold">{e.school}</span>, {e.degree}, <span className="italic">{e.year}</span></div>)}
+        {(data.education || []).map((e,i) => <div key={i} className="mb-3 break-inside-avoid"><span className="font-bold">{e.school}</span>, {e.degree}, <span className="italic">{e.year}</span></div>)}
      </section>
      <section className="mb-8">
         <h2 className="text-md font-bold uppercase border-b border-gray-300 mb-4 pb-1">Professional Experience</h2>
-        {data.experience.map((e,i) => (
-            <div key={i} className="mb-6">
+        {(data.experience || []).map((e,i) => (
+            <div key={i} className="mb-6 break-inside-avoid">
                 <div className="flex justify-between font-bold text-lg"><span>{e.company}</span><span>{e.duration}</span></div>
                 <div className="italic mb-2">{e.role}</div>
                 <div className="text-sm ml-2"><RenderBullets items={e.description} /></div>
             </div>
         ))}
      </section>
-     {data.projects.length > 0 && <section className="mb-8">
+     {(data.projects || []).length > 0 && <section className="mb-8">
         <h2 className="text-md font-bold uppercase border-b border-gray-300 mb-4 pb-1">Key Projects</h2>
         {data.projects.slice(0,5).map((p,i) => (
-            <div key={i} className="mb-4">
+            <div key={i} className="mb-4 break-inside-avoid">
                 <div className="font-bold text-base">{p.name} <span className="font-normal italic text-sm text-gray-600">({p.technologies.join(', ')})</span></div>
                 <p className="text-sm text-justify mt-1">{p.description}</p>
             </div>
         ))}
      </section>}
-     <section className="mb-8">
+     <section className="mb-8 break-inside-avoid">
         <h2 className="text-md font-bold uppercase border-b border-gray-300 mb-4 pb-1">Technical Skills</h2>
-        <p className="text-sm text-justify">{data.skills.join(', ')}</p>
+        <p className="text-sm text-justify leading-relaxed">{(data.skills || []).join(', ')}</p>
      </section>
   </div>
 );
@@ -320,8 +334,8 @@ const TechTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="mb-8">
         <div className="text-[#d33682] font-bold mb-2">class Experience extends Career {'{'}</div>
         <div className="pl-6 border-l-2 border-[#eee8d5] ml-2 space-y-6">
-            {data.experience.map((e,i) => (
-                <div key={i}>
+            {(data.experience || []).map((e,i) => (
+                <div key={i} className="break-inside-avoid">
                     <div className="text-[#b58900] font-bold">function {e.company.replace(/\s/g,'')}_{i}() {'{'}</div>
                     <div className="pl-4 text-[#859900]">// {e.role} ({e.duration})</div>
                     <div className="pl-4 text-[#2aa198]">
@@ -334,11 +348,11 @@ const TechTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         <div className="text-[#d33682] font-bold">{'}'}</div>
      </div>
 
-     {data.projects.length > 0 && <div className="mb-8">
+     {(data.projects || []).length > 0 && <div className="mb-8">
         <div className="text-[#d33682] font-bold mb-2">class Projects extends Side_Hustle {'{'}</div>
         <div className="pl-6 border-l-2 border-[#eee8d5] ml-2 space-y-4">
             {data.projects.slice(0,5).map((p,i) => (
-                <div key={i}>
+                <div key={i} className="break-inside-avoid">
                     <div className="text-[#b58900] font-bold">function {p.name.replace(/\s|[^a-zA-Z]/g,'_')}() {'{'}</div>
                     <div className="pl-4 text-[#859900]">// Stack: {p.technologies.join(', ')}</div>
                     <div className="pl-4 text-[#2aa198] text-justify">return "{p.description}";</div>
@@ -349,10 +363,10 @@ const TechTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         <div className="text-[#d33682] font-bold">{'}'}</div>
      </div>}
      
-     <div>
+     <div className="break-inside-avoid">
         <div className="text-[#cb4b16] font-bold mb-2">const stack = [</div>
         <div className="pl-4 flex flex-wrap gap-2 text-[#2aa198]">
-            {data.skills.map((s,i) => <span key={i}>"{s}",</span>)}
+            {(data.skills || []).map((s,i) => <span key={i}>"{s}",</span>)}
         </div>
         <div className="text-[#cb4b16] font-bold">];</div>
      </div>
@@ -369,13 +383,13 @@ const SwissTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
             <p>{data.personalInfo.phone}</p>
             <div className="mt-12">
                 <h4 className="font-black uppercase mb-4">Competencies</h4>
-                {data.skills.map((s,i)=><div key={i} className="border-b border-gray-200 py-1 text-sm">{s}</div>)}
+                {(data.skills || []).map((s,i)=><div key={i} className="border-b border-gray-200 py-1 text-sm">{s}</div>)}
             </div>
         </div>
         <div className="col-span-3">
              <h2 className="text-4xl font-bold mb-12 flex items-center gap-4">Experience <div className="h-1 bg-black flex-1"></div></h2>
-             {data.experience.map((e,i) => (
-                 <div key={i} className="grid grid-cols-4 gap-6 mb-10">
+             {(data.experience || []).map((e,i) => (
+                 <div key={i} className="grid grid-cols-4 gap-6 mb-10 break-inside-avoid">
                      <div className="font-bold text-right pt-1">{e.duration}</div>
                      <div className="col-span-3">
                          <div className="text-2xl font-bold mb-1">{e.role}</div>
@@ -384,20 +398,20 @@ const SwissTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                      </div>
                  </div>
              ))}
-             {data.projects.length > 0 && <div className="mt-12">
+             {(data.projects || []).length > 0 && <div className="mt-12">
                  <h2 className="text-4xl font-bold mb-12 flex items-center gap-4">Projects <div className="h-1 bg-black flex-1"></div></h2>
                  {data.projects.slice(0,5).map((p,i) => (
-                     <div key={i} className="grid grid-cols-4 gap-6 mb-8">
+                     <div key={i} className="grid grid-cols-4 gap-6 mb-8 break-inside-avoid">
                          <div className="text-xs font-bold text-right pt-1 text-gray-500">{p.technologies.slice(0,3).join(', ')}</div>
                          <div className="col-span-3">
                              <div className="text-xl font-bold mb-1">{p.name}</div>
-                             <p className="text-gray-700 text-justify">{p.description}</p>
+                             <p className="text-gray-700 text-justify leading-relaxed">{p.description}</p>
                          </div>
                      </div>
                  ))}
              </div>}
              <h2 className="text-4xl font-bold mb-8 mt-16 flex items-center gap-4">Education <div className="h-1 bg-black flex-1"></div></h2>
-             {data.education.map((e,i)=>(<div key={i} className="mb-4 text-xl"><strong>{e.school}</strong>, {e.degree}</div>))}
+             {(data.education || []).map((e,i)=>(<div key={i} className="mb-4 text-xl"><strong>{e.school}</strong>, {e.degree}</div>))}
         </div>
      </div>
   </div>
@@ -417,8 +431,8 @@ const BoldTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
           <section className="mb-16 text-center">
               <p className="text-2xl font-light italic text-gray-600 leading-relaxed text-justify">{data.summary}</p>
           </section>
-          {data.experience.map((e,i) => (
-              <div key={i} className="mb-12 border-l-8 pl-8" style={{ borderColor: theme.color }}>
+          {(data.experience || []).map((e,i) => (
+              <div key={i} className="mb-12 border-l-8 pl-8 break-inside-avoid" style={{ borderColor: theme.color }}>
                   <div className="flex justify-between items-end mb-2">
                       <h3 className="text-3xl font-bold uppercase text-gray-800">{e.role}</h3>
                       <span className="font-mono text-gray-500">{e.duration}</span>
@@ -427,10 +441,10 @@ const BoldTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                   <div className="text-gray-700 text-lg leading-relaxed"><RenderBullets items={e.description} /></div>
               </div>
           ))}
-          {data.projects.length > 0 && <div className="mb-16">
+          {(data.projects || []).length > 0 && <div className="mb-16">
               <h3 className="text-3xl font-bold uppercase mb-8 border-b-4 pb-2 inline-block">Notable Projects</h3>
               {data.projects.slice(0,5).map((p,i) => (
-                  <div key={i} className="mb-8">
+                  <div key={i} className="mb-8 break-inside-avoid">
                       <div className="flex items-baseline gap-4 mb-2">
                           <h4 className="text-xl font-bold">{p.name}</h4>
                           <span className="text-sm font-mono text-gray-500">[{p.technologies.join(', ')}]</span>
@@ -439,14 +453,14 @@ const BoldTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                   </div>
               ))}
           </div>}
-          <div className="grid grid-cols-2 gap-12 mt-16 pt-8 border-t">
+          <div className="grid grid-cols-2 gap-12 mt-16 pt-8 border-t break-inside-avoid">
               <div>
                   <h3 className="text-2xl font-bold uppercase mb-4">Skills</h3>
-                  <div className="flex flex-wrap gap-3">{data.skills.map((s,i)=><span key={i} className="bg-gray-100 px-3 py-1 font-bold">{s}</span>)}</div>
+                  <div className="flex flex-wrap gap-3">{(data.skills || []).map((s,i)=><span key={i} className="bg-gray-100 px-3 py-1 font-bold">{s}</span>)}</div>
               </div>
               <div>
                   <h3 className="text-2xl font-bold uppercase mb-4">Education</h3>
-                  {data.education.map((e,i)=><div key={i} className="mb-2"><div className="font-bold">{e.school}</div><div>{e.degree}</div></div>)}
+                  {(data.education || []).map((e,i)=><div key={i} className="mb-2"><div className="font-bold">{e.school}</div><div>{e.degree}</div></div>)}
               </div>
           </div>
       </div>
@@ -464,26 +478,26 @@ const ArtisticTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
       </div>
       <div className="flex-1 p-16">
           <h1 className="text-6xl font-light mb-4" style={{ color: theme.color }}>{data.personalInfo.fullName}</h1>
-          <p className="text-xl text-gray-400 mb-12 font-light text-justify">{data.summary}</p>
+          <p className="text-xl text-gray-400 mb-12 font-light text-justify leading-relaxed">{data.summary}</p>
           
           <div className="grid grid-cols-12 gap-12">
              <div className="col-span-8">
                 <h3 className="text-xl font-bold mb-8 bg-gray-100 inline-block px-4 py-1 rounded-full uppercase text-xs tracking-widest">Experience</h3>
-                {data.experience.map((e,i) => (
-                    <div key={i} className="mb-10">
+                {(data.experience || []).map((e,i) => (
+                    <div key={i} className="mb-10 break-inside-avoid">
                         <div className="font-bold text-2xl mb-1">{e.role}</div>
                         <div className="text-sm font-bold text-gray-400 mb-4 uppercase">{e.company} | {e.duration}</div>
                         <div className="text-gray-600 leading-relaxed"><RenderBullets items={e.description} /></div>
                     </div>
                 ))}
                 
-                {data.projects.length > 0 && <div className="mt-12">
+                {(data.projects || []).length > 0 && <div className="mt-12">
                     <h3 className="text-xl font-bold mb-8 bg-gray-100 inline-block px-4 py-1 rounded-full uppercase text-xs tracking-widest">Projects</h3>
                     {data.projects.slice(0,5).map((p,i) => (
-                        <div key={i} className="mb-8">
+                        <div key={i} className="mb-8 break-inside-avoid">
                             <div className="font-bold text-lg mb-1">{p.name}</div>
                             <div className="text-xs text-gray-400 mb-2 italic">{p.technologies.join(', ')}</div>
-                            <p className="text-gray-600 text-justify">{p.description}</p>
+                            <p className="text-gray-600 text-justify leading-relaxed">{p.description}</p>
                         </div>
                     ))}
                 </div>}
@@ -491,7 +505,7 @@ const ArtisticTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
              <div className="col-span-4 space-y-12">
                  <div>
                     <h3 className="text-xl font-bold mb-6 bg-gray-100 inline-block px-4 py-1 rounded-full uppercase text-xs tracking-widest">Skills</h3>
-                    <div className="flex flex-wrap gap-2">{data.skills.map((s,i)=><span key={i} className="border border-black px-3 py-1 text-xs font-bold rounded-full hover:bg-black hover:text-white transition-colors">{s}</span>)}</div>
+                    <div className="flex flex-wrap gap-2">{(data.skills || []).map((s,i)=><span key={i} className="border border-black px-3 py-1 text-xs font-bold rounded-full hover:bg-black hover:text-white transition-colors">{s}</span>)}</div>
                  </div>
                  <div>
                      <h3 className="text-xl font-bold mb-6 bg-gray-100 inline-block px-4 py-1 rounded-full uppercase text-xs tracking-widest">Contact</h3>
@@ -501,7 +515,7 @@ const ArtisticTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                  </div>
                  <div>
                      <h3 className="text-xl font-bold mb-6 bg-gray-100 inline-block px-4 py-1 rounded-full uppercase text-xs tracking-widest">Education</h3>
-                     {data.education.map((e,i)=><div key={i} className="mb-2 text-sm"><strong>{e.degree}</strong><br/>{e.school}</div>)}
+                     {(data.education || []).map((e,i)=><div key={i} className="mb-2 text-sm"><strong>{e.degree}</strong><br/>{e.school}</div>)}
                  </div>
              </div>
           </div>
@@ -524,8 +538,8 @@ const InfographicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="grid grid-cols-3 gap-8">
         <div className="col-span-2 space-y-6">
             <h2 className="text-2xl font-bold flex items-center gap-3"><span className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-sm font-black shadow-sm" style={{ color: theme.color }}>XP</span> Experience</h2>
-            {data.experience.map((e,i) => (
-                <div key={i} className="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-gray-300 transition-colors">
+            {(data.experience || []).map((e,i) => (
+                <div key={i} className="bg-white border-2 border-gray-100 p-6 rounded-2xl hover:border-gray-300 transition-colors break-inside-avoid">
                     <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-xl">{e.role}</h3>
                         <span className="text-xs font-bold bg-black text-white px-2 py-1 rounded">{e.duration}</span>
@@ -535,20 +549,20 @@ const InfographicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 </div>
             ))}
             
-            {data.projects.length > 0 && <h2 className="text-2xl font-bold flex items-center gap-3 mt-8"><span className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-sm font-black shadow-sm" style={{ color: theme.color }}>PJ</span> Projects</h2>}
+            {(data.projects || []).length > 0 && <h2 className="text-2xl font-bold flex items-center gap-3 mt-8"><span className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-sm font-black shadow-sm" style={{ color: theme.color }}>PJ</span> Projects</h2>}
             {data.projects.slice(0,5).map((p,i) => (
-                <div key={i} className="bg-white border-2 border-gray-100 p-6 rounded-2xl">
+                <div key={i} className="bg-white border-2 border-gray-100 p-6 rounded-2xl break-inside-avoid">
                      <div className="font-bold text-lg mb-1">{p.name}</div>
                      <div className="text-xs text-gray-400 mb-3">{p.technologies.join(' • ')}</div>
-                     <p className="text-sm text-gray-700 text-justify">{p.description}</p>
+                     <p className="text-sm text-gray-700 text-justify leading-relaxed">{p.description}</p>
                 </div>
             ))}
         </div>
         <div className="col-span-1 space-y-8">
-             <div className="bg-gray-50 p-6 rounded-2xl">
+             <div className="bg-gray-50 p-6 rounded-2xl break-inside-avoid">
                 <h2 className="text-xl font-bold mb-4">Skills Analysis</h2>
                 <div className="space-y-3">
-                    {data.skills.slice(0,8).map((s,i) => (
+                    {(data.skills || []).slice(0,8).map((s,i) => (
                         <div key={i}>
                             <div className="flex justify-between text-xs font-bold mb-1"><span>{s}</span><span>{85 + (i%3)*5}%</span></div>
                             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${85 + (i%3)*5}%`, backgroundColor: theme.color }}></div></div>
@@ -556,9 +570,9 @@ const InfographicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                     ))}
                 </div>
              </div>
-             <div className="bg-gray-50 p-6 rounded-2xl">
+             <div className="bg-gray-50 p-6 rounded-2xl break-inside-avoid">
                  <h2 className="text-xl font-bold mb-4">Education</h2>
-                 {data.education.map((e,i)=><div key={i} className="text-sm border-b last:border-0 pb-2 last:pb-0 border-gray-200"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div></div>)}
+                 {(data.education || []).map((e,i)=><div key={i} className="text-sm border-b last:border-0 pb-2 last:pb-0 border-gray-200"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div></div>)}
              </div>
         </div>
      </div>
@@ -575,8 +589,8 @@ const GlitchTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
       <div className="grid grid-cols-3 gap-12">
           <div className="col-span-2">
               <h2 className="text-[#0f0] mb-6 uppercase tracking-widest text-xl bg-green-900/30 inline-block px-2">[ SYSTEM_LOG: EXPERIENCE ]</h2>
-              {data.experience.map((e,i) => (
-                  <div key={i} className="mb-10 border-l border-green-900 pl-6 relative">
+              {(data.experience || []).map((e,i) => (
+                  <div key={i} className="mb-10 border-l border-green-900 pl-6 relative break-inside-avoid">
                       <div className="absolute -left-1.5 top-0 w-3 h-3 bg-black border border-[#0f0]"></div>
                       <div className="text-2xl font-bold mb-1">{e.role}</div>
                       <div className="text-xs text-green-600 mb-4 font-bold">>> EXEC @ {e.company} [{e.duration}]</div>
@@ -584,14 +598,14 @@ const GlitchTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                   </div>
               ))}
               
-              {data.projects.length > 0 && <div className="mt-12">
+              {(data.projects || []).length > 0 && <div className="mt-12">
                    <h2 className="text-[#0f0] mb-6 uppercase tracking-widest text-xl bg-green-900/30 inline-block px-2">[ SYSTEM_LOG: PROJECTS ]</h2>
                    {data.projects.slice(0,5).map((p,i) => (
-                       <div key={i} className="mb-8 border-l border-green-900 pl-6 relative">
+                       <div key={i} className="mb-8 border-l border-green-900 pl-6 relative break-inside-avoid">
                            <div className="absolute -left-1.5 top-0 w-3 h-3 bg-black border border-[#0f0]"></div>
                            <div className="text-xl font-bold mb-1">{p.name}</div>
                            <div className="text-xs text-green-600 mb-2 font-bold">>> {p.technologies.join(' + ')}</div>
-                           <div className="text-sm opacity-80 text-justify">{p.description}</div>
+                           <div className="text-sm opacity-80 text-justify leading-relaxed">{p.description}</div>
                        </div>
                    ))}
               </div>}
@@ -599,10 +613,10 @@ const GlitchTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
           <div>
               <h2 className="text-[#0f0] mb-6 uppercase tracking-widest text-xl bg-green-900/30 inline-block px-2">[ INSTALLED_MODULES ]</h2>
               <ul className="text-sm space-y-2 mb-10">
-                  {data.skills.map((s,i) => <li key={i} className="opacity-80 hover:opacity-100 cursor-default">> {s}</li>)}
+                  {(data.skills || []).map((s,i) => <li key={i} className="opacity-80 hover:opacity-100 cursor-default">> {s}</li>)}
               </ul>
               <h2 className="text-[#0f0] mb-6 uppercase tracking-widest text-xl bg-green-900/30 inline-block px-2">[ KERNEL_INFO ]</h2>
-              {data.education.map((e,i)=>(<div key={i} className="text-sm mb-4">root@{e.school}:~# <span className="opacity-70">{e.degree}</span></div>))}
+              {(data.education || []).map((e,i)=>(<div key={i} className="text-sm mb-4">root@{e.school}:~# <span className="opacity-70">{e.degree}</span></div>))}
           </div>
       </div>
   </div>
@@ -622,8 +636,8 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
             
             <div className="col-span-1 font-bold text-sm uppercase tracking-widest mt-1">Experience</div>
             <div className="col-span-3 space-y-8">
-                {data.experience.map((e,i)=>(
-                    <div key={i}>
+                {(data.experience || []).map((e,i)=>(
+                    <div key={i} className="break-inside-avoid">
                         <div className="font-bold text-lg">{e.role}</div>
                         <div className="text-gray-500 mb-2">{e.company}, {e.duration}</div>
                         <div className="text-gray-700 text-sm"><RenderBullets items={e.description}/></div>
@@ -631,16 +645,26 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 ))}
             </div>
 
-            {data.projects.length > 0 && <div className="col-span-1 font-bold text-sm uppercase tracking-widest mt-1">Projects</div>}
+            {(data.projects || []).length > 0 && <div className="col-span-1 font-bold text-sm uppercase tracking-widest mt-1">Projects</div>}
             {data.projects.length > 0 && <div className="col-span-3 space-y-6">
                 {data.projects.slice(0,5).map((p,i) => (
-                    <div key={i}>
+                    <div key={i} className="break-inside-avoid">
                         <div className="font-bold text-base">{p.name}</div>
                         <div className="text-xs text-gray-500 mb-1">{p.technologies.join(', ')}</div>
-                        <p className="text-sm text-gray-700 text-justify">{p.description}</p>
+                        <p className="text-sm text-gray-700 text-justify leading-relaxed">{p.description}</p>
                     </div>
                 ))}
             </div>}
+            
+            <div className="col-span-1 font-bold text-sm uppercase tracking-widest mt-1">Skills</div>
+            <div className="col-span-3 text-sm text-gray-700 leading-loose">
+               {(data.skills || []).join('  //  ')}
+            </div>
+            
+            <div className="col-span-1 font-bold text-sm uppercase tracking-widest mt-1">Education</div>
+            <div className="col-span-3">
+               {(data.education || []).map((e,i)=>(<div key={i} className="mb-2"><strong>{e.school}</strong>, {e.degree} ({e.year})</div>))}
+            </div>
         </div>
     </div>
 );
@@ -652,19 +676,19 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         <div className="grid grid-cols-2 gap-12">
             <div>
                 <h2 className="font-bold text-3xl mb-6 text-blue-600">Work.</h2>
-                {data.experience.map((e,i)=>(
-                    <div key={i} className="mb-8">
+                {(data.experience || []).map((e,i)=>(
+                    <div key={i} className="mb-8 break-inside-avoid">
                         <div className="font-bold text-xl">{e.role}</div>
                         <div className="text-gray-400 font-bold uppercase text-xs mb-2">{e.company}</div>
                         <div className="text-gray-700"><RenderBullets items={e.description}/></div>
                     </div>
                 ))}
-                {data.projects.length > 0 && <h2 className="font-bold text-3xl mb-6 text-blue-600 mt-12">Projects.</h2>}
+                {(data.projects || []).length > 0 && <h2 className="font-bold text-3xl mb-6 text-blue-600 mt-12">Projects.</h2>}
                 {data.projects.slice(0,5).map((p,i) => (
-                    <div key={i} className="mb-6">
+                    <div key={i} className="mb-6 break-inside-avoid">
                         <div className="font-bold text-lg">{p.name}</div>
                         <div className="text-xs text-gray-400 mb-1">{p.technologies.join(', ')}</div>
-                        <p className="text-gray-700 text-sm text-justify">{p.description}</p>
+                        <p className="text-gray-700 text-sm text-justify leading-relaxed">{p.description}</p>
                     </div>
                 ))}
             </div>
@@ -672,7 +696,10 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 <h2 className="font-bold text-3xl mb-6 text-purple-600">Profile.</h2>
                 <p className="mb-8 text-lg font-light leading-relaxed text-justify">{data.summary}</p>
                 <h3 className="font-bold text-xl mb-4">Skills</h3>
-                <div className="flex flex-wrap gap-2">{data.skills.map((s,i)=><span key={i} className="border-b-2 border-gray-200">{s}</span>)}</div>
+                <div className="flex flex-wrap gap-2">{(data.skills || []).map((s,i)=><span key={i} className="border-b-2 border-gray-200">{s}</span>)}</div>
+                
+                <h3 className="font-bold text-xl mb-4 mt-8">Education</h3>
+                {(data.education || []).map((e,i)=><div key={i} className="mb-2"><strong>{e.school}</strong><br/>{e.degree}</div>)}
             </div>
         </div>
      </div>
@@ -686,16 +713,16 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 <p className="text-slate-400 mb-10">{data.personalInfo.email}</p>
                 
                 <h2 className="font-bold uppercase tracking-widest text-sm mb-4 border-b border-slate-700 pb-2">Skills</h2>
-                <div className="flex flex-wrap gap-2 mb-10">{data.skills.map((s,i)=><span key={i} className="bg-slate-800 px-2 py-1 rounded text-xs">{s}</span>)}</div>
+                <div className="flex flex-wrap gap-2 mb-10">{(data.skills || []).map((s,i)=><span key={i} className="bg-slate-800 px-2 py-1 rounded text-xs">{s}</span>)}</div>
                 
                 <h2 className="font-bold uppercase tracking-widest text-sm mb-4 border-b border-slate-700 pb-2">Education</h2>
-                {data.education.map((e,i)=><div key={i} className="mb-4 text-sm"><strong className="block text-white">{e.school}</strong><span className="text-slate-400">{e.degree}</span></div>)}
+                {(data.education || []).map((e,i)=><div key={i} className="mb-4 text-sm"><strong className="block text-white">{e.school}</strong><span className="text-slate-400">{e.degree}</span></div>)}
             </div>
         </div>
         <div className="w-2/3 p-10">
             <h2 className="font-bold text-2xl mb-8 uppercase text-slate-900 border-b-2 border-slate-900 pb-2">Experience</h2>
-            {data.experience.map((e,i)=>(
-                <div key={i} className="mb-8">
+            {(data.experience || []).map((e,i)=>(
+                <div key={i} className="mb-8 break-inside-avoid">
                     <div className="flex justify-between items-baseline mb-1">
                         <h3 className="font-bold text-xl text-slate-800">{e.role}</h3>
                         <span className="text-sm font-bold text-slate-500">{e.duration}</span>
@@ -705,12 +732,12 @@ const ModernTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 </div>
             ))}
             
-            {data.projects.length > 0 && <h2 className="font-bold text-2xl mb-8 uppercase text-slate-900 border-b-2 border-slate-900 pb-2 mt-12">Projects</h2>}
+            {(data.projects || []).length > 0 && <h2 className="font-bold text-2xl mb-8 uppercase text-slate-900 border-b-2 border-slate-900 pb-2 mt-12">Projects</h2>}
             {data.projects.slice(0,5).map((p,i) => (
-                <div key={i} className="mb-6">
+                <div key={i} className="mb-6 break-inside-avoid">
                     <div className="font-bold text-lg text-slate-800">{p.name}</div>
                     <div className="text-xs font-bold text-slate-500 mb-2">{p.technologies.join(', ')}</div>
-                    <p className="text-slate-700 text-justify text-sm">{p.description}</p>
+                    <p className="text-slate-700 text-justify text-sm leading-relaxed">{p.description}</p>
                 </div>
             ))}
         </div>
@@ -731,8 +758,8 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
         
         <div className="mb-8">
             <h2 className="font-bold text-xl uppercase mb-4 bg-gray-100 p-2">Work Experience</h2>
-            {data.experience.map((e,i)=>(
-                <div key={i} className="mb-6 px-2">
+            {(data.experience || []).map((e,i)=>(
+                <div key={i} className="mb-6 px-2 break-inside-avoid">
                     <div className="flex justify-between font-bold text-lg">
                         <span>{e.role}</span>
                         <span>{e.duration}</span>
@@ -743,20 +770,25 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
             ))}
         </div>
 
-        {data.projects.length > 0 && <div className="mb-8">
+        {(data.projects || []).length > 0 && <div className="mb-8">
              <h2 className="font-bold text-xl uppercase mb-4 bg-gray-100 p-2">Projects</h2>
              {data.projects.slice(0,5).map((p,i) => (
-                 <div key={i} className="mb-4 px-2">
+                 <div key={i} className="mb-4 px-2 break-inside-avoid">
                      <div className="font-bold text-lg">{p.name}</div>
                      <div className="text-sm italic text-gray-500 mb-1">{p.technologies.join(', ')}</div>
-                     <p className="text-gray-700 text-justify pl-2">{p.description}</p>
+                     <p className="text-gray-700 text-justify pl-2 leading-relaxed">{p.description}</p>
                  </div>
              ))}
         </div>}
         
-        <div className="mb-8">
+        <div className="mb-8 break-inside-avoid">
             <h2 className="font-bold text-xl uppercase mb-4 bg-gray-100 p-2">Education</h2>
-            {data.education.map((e,i)=>(<div key={i} className="px-2"><strong>{e.school}</strong> - {e.degree} ({e.year})</div>))}
+            {(data.education || []).map((e,i)=>(<div key={i} className="px-2"><strong>{e.school}</strong> - {e.degree} ({e.year})</div>))}
+        </div>
+
+        <div className="mb-8 break-inside-avoid">
+            <h2 className="font-bold text-xl uppercase mb-4 bg-gray-100 p-2">Skills</h2>
+            <p className="px-2 leading-relaxed text-justify">{(data.skills || []).join(' • ')}</p>
         </div>
     </div>
 );
@@ -769,29 +801,29 @@ const MonochromeTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="grid grid-cols-2 gap-10">
          <div>
              <h2 className="bg-black text-white px-2 py-1 font-bold uppercase mb-4 inline-block">Experience</h2>
-             {data.experience.map((e,i) => (
-                 <div key={i} className="mb-6">
+             {(data.experience || []).map((e,i) => (
+                 <div key={i} className="mb-6 break-inside-avoid">
                      <div className="font-bold text-lg">{e.role}</div>
                      <div className="text-sm underline mb-2">{e.company}</div>
                      <div className="text-sm"><RenderBullets items={e.description} /></div>
                  </div>
              ))}
-             {data.projects.length > 0 && <div className="mt-8">
+             {(data.projects || []).length > 0 && <div className="mt-8">
                  <h2 className="bg-black text-white px-2 py-1 font-bold uppercase mb-4 inline-block">Projects</h2>
                  {data.projects.slice(0,5).map((p,i) => (
-                     <div key={i} className="mb-6">
+                     <div key={i} className="mb-6 break-inside-avoid">
                          <div className="font-bold">{p.name}</div>
                          <div className="text-xs mb-1">[{p.technologies.join(', ')}]</div>
-                         <p className="text-sm text-justify">{p.description}</p>
+                         <p className="text-sm text-justify leading-relaxed">{p.description}</p>
                      </div>
                  ))}
              </div>}
          </div>
          <div>
              <h2 className="bg-black text-white px-2 py-1 font-bold uppercase mb-4 inline-block">Education</h2>
-             {data.education.map((e,i) => <div key={i} className="mb-4"><strong>{e.school}</strong><br/>{e.degree}</div>)}
+             {(data.education || []).map((e,i) => <div key={i} className="mb-4"><strong>{e.school}</strong><br/>{e.degree}</div>)}
              <h2 className="bg-black text-white px-2 py-1 font-bold uppercase mb-4 inline-block mt-8">Skills</h2>
-             <div className="flex flex-wrap gap-2">{data.skills.map((s,i)=><span key={i} className="border border-black px-2 text-xs font-bold">{s}</span>)}</div>
+             <div className="flex flex-wrap gap-2">{(data.skills || []).map((s,i)=><span key={i} className="border border-black px-2 text-xs font-bold">{s}</span>)}</div>
          </div>
      </div>
   </div>
@@ -803,8 +835,8 @@ const FocusedTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="w-16 h-1 bg-black mb-10"></div>
      <p className="max-w-2xl text-gray-600 mb-16 italic text-lg leading-relaxed text-justify">{data.summary}</p>
      <div className="w-full max-w-2xl space-y-16 text-left">
-        {data.experience.map((e,i) => (
-            <div key={i}>
+        {(data.experience || []).map((e,i) => (
+            <div key={i} className="break-inside-avoid">
                 <div className="flex flex-col items-center mb-4">
                     <h3 className="text-2xl font-bold">{e.role}</h3>
                     <div className="text-gray-400 text-sm uppercase tracking-widest mt-1">{e.company} • {e.duration}</div>
@@ -812,7 +844,7 @@ const FocusedTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 <div className="text-gray-700 leading-loose text-justify"><RenderBullets items={e.description} /></div>
             </div>
         ))}
-        {data.projects.length > 0 && <div className="pt-8 border-t">
+        {(data.projects || []).length > 0 && <div className="pt-8 border-t break-inside-avoid">
             <h3 className="text-center font-bold uppercase tracking-widest mb-8">Selected Work</h3>
             {data.projects.slice(0,5).map((p,i) => (
                 <div key={i} className="mb-8">
@@ -822,6 +854,14 @@ const FocusedTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                 </div>
             ))}
         </div>}
+        <div className="pt-8 border-t text-center break-inside-avoid">
+            <h3 className="font-bold uppercase tracking-widest mb-6">Capabilities</h3>
+            <p className="text-gray-600 italic leading-loose">{(data.skills || []).join(' / ')}</p>
+        </div>
+        <div className="pt-8 border-t text-center break-inside-avoid">
+            <h3 className="font-bold uppercase tracking-widest mb-6">Education</h3>
+            {(data.education || []).map((e,i) => <div key={i} className="mb-2"><strong>{e.school}</strong>, {e.degree}</div>)}
+        </div>
      </div>
   </div>
 );
@@ -836,25 +876,29 @@ const MagazineTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
          <section className="break-inside-avoid mb-10">
              <p className="text-xl leading-relaxed font-light text-gray-800 text-justify">{data.summary}</p>
          </section>
-         {data.experience.map((e,i) => (
+         {(data.experience || []).map((e,i) => (
              <section key={i} className="break-inside-avoid mb-8">
                  <h3 className="font-bold text-2xl uppercase italic border-l-4 pl-4 border-gray-900 mb-2">{e.company}</h3>
                  <div className="font-sans text-xs font-bold text-gray-500 mb-3 uppercase tracking-wide">{e.role} | {e.duration}</div>
                  <div className="text-base text-justify leading-relaxed text-gray-700"><RenderBullets items={e.description} /></div>
              </section>
          ))}
-         {data.projects.length > 0 && <section className="break-inside-avoid mb-8">
+         {(data.projects || []).length > 0 && <section className="break-inside-avoid mb-8">
              <h3 className="font-bold text-2xl uppercase italic border-l-4 pl-4 border-gray-900 mb-4">Projects</h3>
              {data.projects.slice(0,5).map((p,i) => (
                  <div key={i} className="mb-6">
                      <div className="font-bold text-lg">{p.name}</div>
-                     <p className="text-justify text-gray-700">{p.description}</p>
+                     <p className="text-justify text-gray-700 leading-relaxed">{p.description}</p>
                  </div>
              ))}
          </section>}
           <section className="break-inside-avoid bg-gray-100 p-8 text-center mt-8">
              <h3 className="font-sans font-bold uppercase mb-4 tracking-widest">Core Competencies</h3>
-             <p className="italic text-lg leading-loose text-justify">{data.skills.join(' • ')}</p>
+             <p className="italic text-lg leading-loose text-justify">{(data.skills || []).join(' • ')}</p>
+         </section>
+         <section className="break-inside-avoid mt-8 p-8 border-t-2 border-black">
+             <h3 className="font-sans font-bold uppercase mb-4 tracking-widest">Education</h3>
+             {(data.education || []).map((e,i) => <div key={i} className="mb-2 font-bold">{e.school}, <span className="font-normal italic">{e.degree}</span></div>)}
          </section>
      </div>
   </div>
@@ -869,8 +913,8 @@ const CompactTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
      <div className="grid grid-cols-12 gap-6">
         <div className="col-span-8">
            <h2 className="font-bold border-b mb-3 uppercase text-gray-900 tracking-wider">Experience</h2>
-           {data.experience.map((e,i) => (
-               <div key={i} className="mb-4">
+           {(data.experience || []).map((e,i) => (
+               <div key={i} className="mb-4 break-inside-avoid">
                    <div className="flex justify-between items-baseline">
                        <div className="font-bold text-base">{e.role}</div>
                        <div className="text-gray-500 italic">{e.duration}</div>
@@ -879,10 +923,10 @@ const CompactTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
                    <div className="ml-2"><RenderBullets items={e.description} /></div>
                </div>
            ))}
-           {data.projects.length > 0 && <div className="mt-6">
+           {(data.projects || []).length > 0 && <div className="mt-6">
                <h2 className="font-bold border-b mb-3 uppercase text-gray-900 tracking-wider">Projects</h2>
                {data.projects.slice(0,5).map((p,i) => (
-                   <div key={i} className="mb-3">
+                   <div key={i} className="mb-3 break-inside-avoid">
                        <span className="font-bold">{p.name}: </span>
                        <span className="text-justify">{p.description}</span>
                    </div>
@@ -896,11 +940,11 @@ const CompactTemplate: React.FC<TemplateProps> = ({ data, theme }) => (
             </div>
             <div>
                 <h2 className="font-bold border-b mb-3 uppercase text-gray-900 tracking-wider">Skills</h2>
-                <div className="flex flex-wrap gap-1">{data.skills.map((s,i)=><span key={i} className="bg-gray-100 px-1 rounded">{s}</span>)}</div>
+                <div className="flex flex-wrap gap-1">{(data.skills || []).map((s,i)=><span key={i} className="bg-gray-100 px-1 rounded">{s}</span>)}</div>
             </div>
             <div>
                 <h2 className="font-bold border-b mb-3 uppercase text-gray-900 tracking-wider">Education</h2>
-                {data.education.map((e,i) => <div key={i} className="mb-2"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div></div>)}
+                {(data.education || []).map((e,i) => <div key={i} className="mb-2"><strong>{e.degree}</strong><div className="text-gray-500">{e.school}</div></div>)}
             </div>
         </div>
      </div>
